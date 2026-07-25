@@ -34,13 +34,13 @@ jobs:
     #     # --KEY must reference the exact key namespace defined in the file above
     #     gem push --KEY github --host https://rubygems.pkg.github.com/${{ github.repository_owner }} jio_hola_world-*.gem
 
-    # - name: Publish to RubyGems
-    #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    #   run: |
-    #     gem build jio_hola_world.gemspec
-    #     gem push jio_hola_world-*.gem
-    #   env:
-    #     GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_AUTH_TOKEN }}
+    - name: Publish to RubyGems
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        gem build jio_hola_world.gemspec
+        gem push jio_hola_world-*.gem
+      env:
+        GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_AUTH_TOKEN }}
 
     # - name: Install dependencies
     #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -49,15 +49,3 @@ jobs:
     # - name: Publish to RubyGems via Trusted Publishing
     #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     #   uses: rubygems/release-gem@v1  # Officially managed step that handles OIDC tokens automatically
-
-
-    - name: Publish to RubyGems
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      run: |
-        # Leverage your saved repository secret instead of interactive OIDC setups
-        mkdir -p $HOME/.gem
-        printf -- "---\n:rubygems_api_key: %s\n" "${{ secrets.RUBYGEMS_AUTH_TOKEN }}" > $HOME/.gem/credentials
-        chmod 0600 $HOME/.gem/credentials
-        
-        gem build jio_hola_world.gemspec
-        gem push jio_hola_world-*.gem
