@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
-
-# Specify your gem's dependencies in hola_world.gemspec
 gemspec
+
+group :development, :test do
+  gem "rake", "~> 13.0"
+end
