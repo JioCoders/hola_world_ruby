@@ -34,14 +34,14 @@ jobs:
         # --KEY must reference the exact key namespace defined in the file above
         gem push --KEY github --host https://rubygems.pkg.github.com/${{ github.repository_owner }} jio_hola_world-*.gem
 
-    - name: Publish to RubyGems
+    # - name: Publish to RubyGems
+    #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    #   run: |
+    #     gem build jio_hola_world.gemspec
+    #     gem push jio_hola_world-*.gem
+    #   env:
+    #     GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_AUTH_TOKEN }}
+
+    - name: Publish to RubyGems via Trusted Publishing
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      run: |
-        mkdir -p $HOME/.gem
-        printf -- "---\n:rubygems_api_key: %s\n" "${{ secrets.RUBYGEMS_AUTH_TOKEN }}" > $HOME/.gem/credentials
-        chmod 0600 $HOME/.gem/credentials
-        
-        gem build jio_hola_world.gemspec
-        # ADD THIS EXTENSION: --otp is not needed when MFA level is set to 'Applicable' 
-        # on the key, but we pass an empty check or use the environment variable trick:
-        GEM_HOST_API_KEY="${{ secrets.RUBYGEMS_AUTH_TOKEN }}" gem push jio_hola_world-*.gem
+      uses: rubygems/release-gem@v1  # Officially managed step that handles OIDC tokens automatically
