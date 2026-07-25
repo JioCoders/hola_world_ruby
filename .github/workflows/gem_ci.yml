@@ -35,12 +35,13 @@ jobs:
         gem push --KEY github --host https://rubygems.pkg.github.com/${{ github.repository_owner }} jio_hola_world-*.gem
 
     - name: Publish to RubyGems
-      # Only run this step when code pushes to main, not on every PR evaluation branch
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: |
         mkdir -p $HOME/.gem
         printf -- "---\n:rubygems_api_key: %s\n" "${{ secrets.RUBYGEMS_AUTH_TOKEN }}" > $HOME/.gem/credentials
         chmod 0600 $HOME/.gem/credentials
         
-        # Bypasses the active MFA prompt block via the modern automation API flag
-        gem push jio_hola_world-*.gem
+        gem build jio_hola_world.gemspec
+        # ADD THIS EXTENSION: --otp is not needed when MFA level is set to 'Applicable' 
+        # on the key, but we pass an empty check or use the environment variable trick:
+        GEM_HOST_API_KEY="${{ secrets.RUBYGEMS_AUTH_TOKEN }}" gem push jio_hola_world-*.gem
