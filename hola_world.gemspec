@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "hola_world/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "hola_world"
+  spec.name          = "jio_hola_world"
   spec.version       = HolaWorld::VERSION
   spec.authors       = ["JioCoders"]
   spec.email         = ["jiocoders@gmail.com"]
