@@ -1,4 +1,4 @@
-RSpec.describe HolaWorld do
+RSpec.describe JioHolaWorld do
   it "has a version number" do
     expect(JioHolaWorld::VERSION).not_to be nil
   end
