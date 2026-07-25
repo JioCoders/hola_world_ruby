@@ -51,12 +51,13 @@ jobs:
     #   uses: rubygems/release-gem@v1  # Officially managed step that handles OIDC tokens automatically
 
 
-    - name: Configure RubyGems Credentials via OIDC
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: rubygems/configure-rubygems-credentials@v1
-
     - name: Publish to RubyGems
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: |
+        # Leverage your saved repository secret instead of interactive OIDC setups
+        mkdir -p $HOME/.gem
+        printf -- "---\n:rubygems_api_key: %s\n" "${{ secrets.RUBYGEMS_AUTH_TOKEN }}" > $HOME/.gem/credentials
+        chmod 0600 $HOME/.gem/credentials
+        
         gem build jio_hola_world.gemspec
         gem push jio_hola_world-*.gem
