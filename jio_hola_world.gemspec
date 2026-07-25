@@ -17,4 +17,8 @@ Gem::Specification.new do |spec|
   # ... (metadata and file listing config as seen in original code)
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.require_paths = ["lib"]
+  # Locate your spec.files definition block and update it to look like this:
+  spec.files = `git ls-files -z`.split("\x0").reject do |f|
+    f.match(%r{^(test|spec|features)/}) || f.end_with?('.gem')
+  end
 end
