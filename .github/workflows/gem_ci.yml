@@ -42,6 +42,10 @@ jobs:
     #   env:
     #     GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_AUTH_TOKEN }}
 
+    - name: Install dependencies
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: bundle install
+
     - name: Publish to RubyGems via Trusted Publishing
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: rubygems/release-gem@v1  # Officially managed step that handles OIDC tokens automatically
