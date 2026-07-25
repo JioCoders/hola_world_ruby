@@ -42,10 +42,21 @@ jobs:
     #   env:
     #     GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_AUTH_TOKEN }}
 
-    - name: Install dependencies
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      run: bundle install
+    # - name: Install dependencies
+    #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    #   run: bundle install
 
-    - name: Publish to RubyGems via Trusted Publishing
+    # - name: Publish to RubyGems via Trusted Publishing
+    #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    #   uses: rubygems/release-gem@v1  # Officially managed step that handles OIDC tokens automatically
+
+
+    - name: Configure RubyGems Credentials via OIDC
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: rubygems/release-gem@v1  # Officially managed step that handles OIDC tokens automatically
+      uses: rubygems/configure-rubygems-credentials@v1
+
+    - name: Publish to RubyGems
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        gem build jio_hola_world.gemspec
+        gem push jio_hola_world-*.gem
