@@ -1,6 +1,6 @@
-require "hola_world/version"
+require "jio_hola_world/version"
 
-module HolaWorld
+module JioHolaWorld
   class Error < StandardError; end
   # Your code goes here...
 end

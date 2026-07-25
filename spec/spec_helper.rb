@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "hola_world"
+require "jio_hola_world"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
